@@ -8,13 +8,8 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 
-// NOTA: puede usar el comando "Rename" del menú "Refactorizar" para cambiar el nombre de clase "Service1" en el código, en svc y en el archivo de configuración.
 public class Service : IService
 {
-	public string GetData(int value)
-	{
-		return string.Format("You entered: {0}", value);
-	}
 
 	public string GetDataEmployeeId(int employeeId)
 	{
@@ -39,4 +34,52 @@ public class Service : IService
 		}
 		return data;
 	}
+
+    public void CreateEmployee(CreateEmployeeRequest request)
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var newEmployee = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync("https://localhost:7154/Employees", newEmployee).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Empleado creado exitosamente.");
+            }
+			else
+			{
+                Console.WriteLine("Error al crear el empleado. Código de estado: " + response.StatusCode);
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+    }
+    public string DeleteEmployeeId(int employeeId)
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var response = client.DeleteAsync("https://p2-soa-api.azurewebsites.net/Employees/" +  employeeId).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Employee deleted successfully.";
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
 }
