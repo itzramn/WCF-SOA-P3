@@ -82,4 +82,62 @@ public class Service : IService
         }
         return data;
     }
+
+    public string SendEmailReminders()
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var response = client.GetAsync("https://localhost:7154/Email").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Emails Enviados";
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+
+        return data;
+    }
+
+    public string ValidateEmployeeLogin(LoginRequest request)
+    {
+        string data;
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            LoginRequest loginEntity = new LoginRequest
+            {
+                email = request.email,
+                password = request.password
+            };
+
+            var json = JsonConvert.SerializeObject(loginEntity);
+
+            var employee = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync("https://p2-soa-api.azurewebsites.net/Auth", employee).Result;
+
+            if(response.IsSuccessStatusCode)
+            {
+                return "Acceso correcto";
+            } else
+            {
+                data = "Acceso incorrecto";
+            }
+        } catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+
 }

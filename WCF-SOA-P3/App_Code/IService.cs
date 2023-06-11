@@ -18,6 +18,12 @@ public interface IService
     [OperationContract]
     string DeleteEmployeeId(int employeeId);
 
+	[OperationContract]
+	string SendEmailReminders();
+
+	[OperationContract]
+	string ValidateEmployeeLogin(LoginRequest request);
+
 }
 
 
