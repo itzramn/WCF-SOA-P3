@@ -35,7 +35,7 @@ public class Service : IService
 		return data;
 	}
 
-    public void CreateEmployee(CreateEmployeeRequest request)
+    public void CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate)
     {
         string data = "";
         try
@@ -43,9 +43,27 @@ public class Service : IService
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
-            var newEmployee = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            var assets = new
+            {
+                Id = id,
+                DeliveryDate = deliveryDate
+            };
 
-            var response = client.PostAsync("https://localhost:7154/Employees", newEmployee).Result;
+            var employeeData = new
+            {
+                Name = name,
+                LastName = lastName,
+                Curp = curp,
+                BirthDate = birthDate,
+                Email = email,
+                EntryDate = DateTime.Now,
+                Assets = new[] { assets }
+
+            };
+
+            var newEmployee = new StringContent(JsonConvert.SerializeObject(employeeData), Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync("https://p2-soa-api.azurewebsites.net/Employees", newEmployee).Result;
 
             if (response.IsSuccessStatusCode)
             {
