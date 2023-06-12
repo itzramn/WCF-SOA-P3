@@ -91,7 +91,47 @@ public class Service : IService
 
             if (response.IsSuccessStatusCode)
             {
-                return "Employee deleted successfully.";
+                return "Se ha eliminado el empleado";
+            }
+            else
+            {
+                data = "No se ha podido eliminar al empleado " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+    //   ASSETS   //
+    public string CreateAsset(string name, string description)
+    {
+        string data;
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var newAsset = new CreateAssetRequest
+            {
+                name = name,
+                description = description
+            };
+
+            var json = JsonConvert.SerializeObject(newAsset);
+
+            var asset = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync("https://p2-soa-api.azurewebsites.net/Assets", asset).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Se ha creado correctamente el asset";
+            }
+            else
+            {
+                data = "No se ha podido crear el asset " + response.StatusCode;
             }
         }
         catch (Exception ex)

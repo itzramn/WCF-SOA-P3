@@ -18,6 +18,9 @@ public interface IService
     [OperationContract]
     string DeleteEmployeeId(int employeeId);
 
+    //   ASSETS   //
+    [OperationContract]
+    string CreateAsset(string name, string description);
 }
 
 [DataContract]
