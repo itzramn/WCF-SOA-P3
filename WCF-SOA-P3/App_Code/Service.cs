@@ -10,8 +10,8 @@ using System.Text;
 
 public class Service : IService
 {
-
-	public string GetDataEmployeeId(int employeeId)
+    //   EMPLOYEES   //
+    public string GetDataEmployeeId(int employeeId)
 	{
 		string data = "";
 		try
@@ -81,7 +81,7 @@ public class Service : IService
     }
     public string DeleteEmployeeId(int employeeId)
     {
-        string data = "";
+        string data;
         try
         {
             HttpClient client = new HttpClient();
@@ -143,7 +143,7 @@ public class Service : IService
 
     public string DeleteAsset(int assetId)
     {
-        string data = "";
+        string data;
         try
         {
             HttpClient client = new HttpClient();
