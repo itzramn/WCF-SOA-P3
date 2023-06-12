@@ -21,6 +21,8 @@ public interface IService
     //   ASSETS   //
     [OperationContract]
     string CreateAsset(string name, string description);
+	[OperationContract]
+	string DeleteAsset(int assetId);
 }
 
 [DataContract]

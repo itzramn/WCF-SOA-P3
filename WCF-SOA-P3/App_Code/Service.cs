@@ -127,11 +127,37 @@ public class Service : IService
 
             if (response.IsSuccessStatusCode)
             {
-                return "Se ha creado correctamente el asset";
+                return "Se ha creado correctamente el activo";
             }
             else
             {
-                data = "No se ha podido crear el asset " + response.StatusCode;
+                data = "No se ha podido crear el activo " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+
+    public string DeleteAsset(int assetId)
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var response = client.DeleteAsync("https://p2-soa-api.azurewebsites.net/Assets/" + assetId).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Se ha eliminado el activo";
+            }
+            else
+            {
+                data = "No se ha podido eliminar el activo " + response.StatusCode;
             }
         }
         catch (Exception ex)
