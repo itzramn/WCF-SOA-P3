@@ -21,12 +21,4 @@ public class CreateEmployeeRequest
     public DateTime entryDate { get; set; }
     [DataMember]
     public List<AssetAssigment> assets { get; set; }
-
-    public class AssetAssigment
-    {
-        [DataMember]
-        public int id { get; set; }
-        [DataMember]
-        public DateTime deliveryDate { get; set; }
-    }
 }

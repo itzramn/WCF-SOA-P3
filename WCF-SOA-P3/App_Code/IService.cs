@@ -10,11 +10,12 @@ using System.Text;
 [ServiceContract]
 public interface IService
 {
-
-	[OperationContract]
+    [OperationContract]
+    string GetAllEmployees();
+    [OperationContract]
 	string GetDataEmployeeId(int employeeId);
 	[OperationContract]
-    void CreateEmployee(CreateEmployeeRequest request);
+    string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate);
     [OperationContract]
     string DeleteEmployeeId(int employeeId);
 
@@ -24,8 +25,14 @@ public interface IService
 	[OperationContract]
 	string ValidateEmployeeLogin(LoginRequest request);
 
+	//   ASSETS   //
+	[OperationContract]
+	string GetAllAssets();
+    [OperationContract]
+    string CreateAsset(string name, string description);
+	[OperationContract]
+	string DeleteAsset(int assetId);
 }
-
 
 [DataContract]
 public class CompositeType

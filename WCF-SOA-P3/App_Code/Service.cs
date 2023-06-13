@@ -10,8 +10,30 @@ using System.Text;
 
 public class Service : IService
 {
+    //   EMPLOYEES   //
+    public string GetAllEmployees()
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
 
-	public string GetDataEmployeeId(int employeeId)
+            var response = client.GetAsync("https://p2-soa-api.azurewebsites.net/Employees").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                return result;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+    public string GetDataEmployeeId(int employeeId)
 	{
 		string data = "";
 		try
@@ -35,7 +57,7 @@ public class Service : IService
 		return data;
 	}
 
-    public void CreateEmployee(CreateEmployeeRequest request)
+    public string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate)
     {
         string data = "";
         try
@@ -43,27 +65,48 @@ public class Service : IService
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
-            var newEmployee = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            var newEmployee = new CreateEmployeeRequest
+            {
+                name = name,
+                lastName = lastName,
+                curp = curp,
+                birthDate = birthDate,
+                email = email,
+                entryDate = DateTime.Now,
+                assets = new List<AssetAssigment>
+                {
+                    new AssetAssigment
+                    {
+                        id = id,
+                        deliveryDate = deliveryDate
+                    }
+                }
+            };
 
-            var response = client.PostAsync("https://localhost:7154/Employees", newEmployee).Result;
+            var json = JsonConvert.SerializeObject(newEmployee);
+
+            var employee = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync("https://localhost:7154/Employees", employee).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Empleado creado exitosamente.");
+                return "Empleado creado exitosamente.";
             }
 			else
 			{
-                Console.WriteLine("Error al crear el empleado. Código de estado: " + response.StatusCode);
+                return "Error al crear el empleado. Código de estado: " + response.StatusCode;
             }
         }
         catch (Exception ex)
         {
             data = ex.Message;
         }
+        return data;
     }
     public string DeleteEmployeeId(int employeeId)
     {
-        string data = "";
+        string data;
         try
         {
             HttpClient client = new HttpClient();
@@ -73,7 +116,11 @@ public class Service : IService
 
             if (response.IsSuccessStatusCode)
             {
-                return "Employee deleted successfully.";
+                return "Se ha eliminado el empleado";
+            }
+            else
+            {
+                data = "No se ha podido eliminar al empleado " + response.StatusCode;
             }
         }
         catch (Exception ex)
@@ -82,7 +129,6 @@ public class Service : IService
         }
         return data;
     }
-
     public string SendEmailReminders()
     {
         string data = "";
@@ -126,18 +172,104 @@ public class Service : IService
 
             var response = client.PostAsync("https://p2-soa-api.azurewebsites.net/Auth", employee).Result;
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 return "Acceso correcto";
-            } else
+            }
+            else
             {
                 data = "Acceso incorrecto";
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             data = ex.Message;
         }
         return data;
     }
 
+    //   ASSETS   //
+    public string GetAllAssets()
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var response = client.GetAsync("https://p2-soa-api.azurewebsites.net/Assets").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                return result;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+    public string CreateAsset(string name, string description)
+    {
+        string data;
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var newAsset = new CreateAssetRequest
+            {
+                name = name,
+                description = description
+            };
+
+            var json = JsonConvert.SerializeObject(newAsset);
+
+            var asset = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync("https://p2-soa-api.azurewebsites.net/Assets", asset).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Se ha creado correctamente el activo";
+            }
+            else
+            {
+                data = "No se ha podido crear el activo " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+
+    public string DeleteAsset(int assetId)
+    {
+        string data;
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var response = client.DeleteAsync("https://p2-soa-api.azurewebsites.net/Assets/" + assetId).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Se ha eliminado el activo";
+            }
+            else
+            {
+                data = "No se ha podido eliminar el activo " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
 }
