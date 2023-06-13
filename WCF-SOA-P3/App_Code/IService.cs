@@ -10,15 +10,18 @@ using System.Text;
 [ServiceContract]
 public interface IService
 {
-
-	[OperationContract]
+    [OperationContract]
+    string GetAllEmployees();
+    [OperationContract]
 	string GetDataEmployeeId(int employeeId);
 	[OperationContract]
     string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate);
     [OperationContract]
     string DeleteEmployeeId(int employeeId);
 
-    //   ASSETS   //
+	//   ASSETS   //
+	[OperationContract]
+	string GetAllAssets();
     [OperationContract]
     string CreateAsset(string name, string description);
 	[OperationContract]

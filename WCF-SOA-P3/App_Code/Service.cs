@@ -11,6 +11,28 @@ using System.Text;
 public class Service : IService
 {
     //   EMPLOYEES   //
+    public string GetAllEmployees()
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var response = client.GetAsync("https://p2-soa-api.azurewebsites.net/Employees").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                return result;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
     public string GetDataEmployeeId(int employeeId)
 	{
 		string data = "";
@@ -108,6 +130,28 @@ public class Service : IService
         return data;
     }
     //   ASSETS   //
+    public string GetAllAssets()
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var response = client.GetAsync("https://p2-soa-api.azurewebsites.net/Assets").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                return result;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
     public string CreateAsset(string name, string description)
     {
         string data;
