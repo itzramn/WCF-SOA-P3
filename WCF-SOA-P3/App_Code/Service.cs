@@ -35,7 +35,7 @@ public class Service : IService
 		return data;
 	}
 
-    public void CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate)
+    public string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate)
     {
         string data = "";
         try
@@ -43,41 +43,44 @@ public class Service : IService
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
-            var assets = new
+            var newEmployee = new CreateEmployeeRequest
             {
-                Id = id,
-                DeliveryDate = deliveryDate
+                name = name,
+                lastName = lastName,
+                curp = curp,
+                birthDate = birthDate,
+                email = email,
+                entryDate = DateTime.Now,
+                assets = new List<AssetAssigment>
+                {
+                    new AssetAssigment
+                    {
+                        id = id,
+                        deliveryDate = deliveryDate
+                    }
+                }
             };
 
-            var employeeData = new
-            {
-                Name = name,
-                LastName = lastName,
-                Curp = curp,
-                BirthDate = birthDate,
-                Email = email,
-                EntryDate = DateTime.Now,
-                Assets = new[] { assets }
+            var json = JsonConvert.SerializeObject(newEmployee);
 
-            };
+            var employee = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var newEmployee = new StringContent(JsonConvert.SerializeObject(employeeData), Encoding.UTF8, "application/json");
-
-            var response = client.PostAsync("https://p2-soa-api.azurewebsites.net/Employees", newEmployee).Result;
+            var response = client.PostAsync("https://localhost:7154/Employees", employee).Result;
 
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Empleado creado exitosamente.");
+                return "Empleado creado exitosamente.";
             }
 			else
 			{
-                Console.WriteLine("Error al crear el empleado. Código de estado: " + response.StatusCode);
+                return "Error al crear el empleado. Código de estado: " + response.StatusCode;
             }
         }
         catch (Exception ex)
         {
             data = ex.Message;
         }
+        return data;
     }
     public string DeleteEmployeeId(int employeeId)
     {

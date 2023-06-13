@@ -14,7 +14,7 @@ public interface IService
 	[OperationContract]
 	string GetDataEmployeeId(int employeeId);
 	[OperationContract]
-    void CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate);
+    string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate);
     [OperationContract]
     string DeleteEmployeeId(int employeeId);
 
