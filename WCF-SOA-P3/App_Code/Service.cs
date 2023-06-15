@@ -11,7 +11,7 @@ using System.Text;
 public class Service : IService
 {
     //   EMPLOYEES   //
-    public string GetAllEmployees()
+    public string GetEmployees()
     {
         string data = "";
         try
@@ -33,29 +33,6 @@ public class Service : IService
         }
         return data;
     }
-    public string GetDataEmployeeId(int employeeId)
-	{
-		string data = "";
-		try
-		{
-			HttpClient client = new HttpClient();
-			client.DefaultRequestHeaders.Accept.Clear();
-
-			var response = client.GetAsync("https://p2-soa-api.azurewebsites.net/Employees").Result;
-
-			if (response.IsSuccessStatusCode)
-			{
-				var result = response.Content.ReadAsStringAsync().Result;
-				List<Employee> employees = JsonConvert.DeserializeObject<List<Employee>>(result);
-				var employee = employees.FirstOrDefault(x => x.employeeId == employeeId);
-				data = JsonConvert.SerializeObject(employee);
-			}
-		} catch (Exception ex)
-		{
-			data = ex.Message;
-		}
-		return data;
-	}
 
     public string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate)
     {
@@ -104,7 +81,7 @@ public class Service : IService
         }
         return data;
     }
-    public string DeleteEmployeeId(int employeeId)
+    public string DeleteEmployee(int employeeId)
     {
         string data;
         try
@@ -129,6 +106,34 @@ public class Service : IService
         }
         return data;
     }
+    public string RemoveAssetFromEmployee(int employeeId, int assetId)
+    {
+        string data;
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var url = string.Format("https://p2-soa-api.azurewebsites.net/Employees/{0}/Assets/{1}", employeeId, assetId);
+            var response = client.DeleteAsync(url).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Activo eliminado del empleado";
+            }
+            else
+            {
+                data = "El empleado o el activo no existen o no están asociados " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+
+    //   EMAIL   //
     public string SendEmailReminders()
     {
         string data = "";
@@ -152,6 +157,7 @@ public class Service : IService
         return data;
     }
 
+    //   AUTH   //
     public string ValidateEmployeeLogin(LoginRequest request)
     {
         string data;
@@ -189,7 +195,7 @@ public class Service : IService
     }
 
     //   ASSETS   //
-    public string GetAllAssets()
+    public string GetAssets(bool? status)
     {
         string data = "";
         try
@@ -197,7 +203,14 @@ public class Service : IService
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
-            var response = client.GetAsync("https://p2-soa-api.azurewebsites.net/Assets").Result;
+            string url= "https://p2-soa-api.azurewebsites.net/Assets";
+
+            if (status.HasValue)
+            {
+                url += "?status=" + status.Value;
+            }
+
+            var response = client.GetAsync(url).Result;
 
             if (response.IsSuccessStatusCode)
             {

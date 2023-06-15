@@ -11,15 +11,16 @@ using System.Text;
 public interface IService
 {
     [OperationContract]
-    string GetAllEmployees();
-    [OperationContract]
-	string GetDataEmployeeId(int employeeId);
+    string GetEmployees();
+
 	[OperationContract]
     string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate);
     [OperationContract]
-    string DeleteEmployeeId(int employeeId);
-
+    string DeleteEmployee(int employeeId);
 	[OperationContract]
+    string RemoveAssetFromEmployee(int employeeId, int assetId);
+
+    [OperationContract]
 	string SendEmailReminders();
 
 	[OperationContract]
@@ -27,7 +28,7 @@ public interface IService
 
 	//   ASSETS   //
 	[OperationContract]
-	string GetAllAssets();
+	string GetAssets(bool? status);
     [OperationContract]
     string CreateAsset(string name, string description);
 	[OperationContract]
