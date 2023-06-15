@@ -10,6 +10,7 @@ using System.Text;
 [ServiceContract]
 public interface IService
 {
+    //   EMPLOYEES   //
     [OperationContract]
     string GetEmployees();
 
@@ -19,11 +20,17 @@ public interface IService
     string DeleteEmployee(int employeeId);
 	[OperationContract]
     string RemoveAssetFromEmployee(int employeeId, int assetId);
+	string UpdateEmployee(int employeeId, string name, string lastName, string curp, DateTime birthDate, string email);
+
+
+    //   EMAIL   //
 
     [OperationContract]
 	string SendEmailReminders();
 
-	[OperationContract]
+    //   AUTH   //
+
+    [OperationContract]
 	string ValidateEmployeeLogin(LoginRequest request);
 
 	//   ASSETS   //

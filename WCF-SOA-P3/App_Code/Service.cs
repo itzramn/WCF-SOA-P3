@@ -133,6 +133,46 @@ public class Service : IService
         return data;
     }
 
+    public string UpdateEmployee(int employeeId, string name, string lastName, string curp, DateTime birthDate, string email)
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var updatedEmployee = new UpdateEmployeeRequest
+            {
+                name = name,
+                lastName = lastName,
+                curp = curp,
+                birthDate = birthDate,
+                email = email,
+            };
+
+            var json = JsonConvert.SerializeObject(updatedEmployee);
+
+            var employee = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync(string.Format("https://localhost:7154/Employees/{0}", employeeId), employee).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Empleado actualizado exitosamente.";
+            }
+            else
+            {
+                return "Error al actualizar el empleado. Código de estado: " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+
+
     //   EMAIL   //
     public string SendEmailReminders()
     {
