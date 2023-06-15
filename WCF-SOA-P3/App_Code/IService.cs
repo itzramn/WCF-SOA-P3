@@ -31,7 +31,7 @@ public interface IService
     //   AUTH   //
 
     [OperationContract]
-	string ValidateEmployeeLogin(LoginRequest request);
+	string ValidateEmployeeLogin(string email, string password);
 
 	//   ASSETS   //
 	[OperationContract]

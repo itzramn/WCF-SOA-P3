@@ -198,7 +198,7 @@ public class Service : IService
     }
 
     //   AUTH   //
-    public string ValidateEmployeeLogin(LoginRequest request)
+    public string ValidateEmployeeLogin(string email, string password)
     {
         string data;
         try
@@ -206,10 +206,10 @@ public class Service : IService
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
-            LoginRequest loginEntity = new LoginRequest
+            var loginEntity = new LoginRequest
             {
-                email = request.email,
-                password = request.password
+                email = email,
+                password = password
             };
 
             var json = JsonConvert.SerializeObject(loginEntity);
