@@ -20,5 +20,5 @@ public class CreateEmployeeRequest
     [DataMember]
     public DateTime entryDate { get; set; }
     [DataMember]
-    public List<AssetAssigment> assets { get; set; }
+    public string assets { get; set; }
 }

@@ -15,12 +15,13 @@ public interface IService
     string GetEmployees();
 
 	[OperationContract]
-    string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, int id, DateTime deliveryDate);
+    string CreateEmployee(string name, string lastName, string curp, DateTime birthDate, string email, string assets);
     [OperationContract]
     string DeleteEmployee(int employeeId);
 	[OperationContract]
     string RemoveAssetFromEmployee(int employeeId, int assetId);
-	string UpdateEmployee(int employeeId, string name, string lastName, string curp, DateTime birthDate, string email);
+    [OperationContract]
+    string UpdateEmployee(int employeeId, string name, string lastName, string curp, DateTime birthDate, string email);
 
 
     //   EMAIL   //
