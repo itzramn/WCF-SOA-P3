@@ -33,6 +33,8 @@ public interface IService
     string CreateAsset(string name, string description);
 	[OperationContract]
 	string DeleteAsset(int assetId);
+	[OperationContract]
+	string ReleaseAsset(int assetId);
 }
 
 [DataContract]

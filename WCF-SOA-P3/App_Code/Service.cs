@@ -119,7 +119,7 @@ public class Service : IService
 
             if (response.IsSuccessStatusCode)
             {
-                return "Activo eliminado del empleado";
+                return "Activo se ha eliminado del empleado";
             }
             else
             {
@@ -277,6 +277,33 @@ public class Service : IService
             else
             {
                 data = "No se ha podido eliminar el activo " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
+    public string ReleaseAsset(int assetId)
+    {
+        string data;
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            var url = string.Format("https://p2-soa-api.azurewebsites.net/Assets/{0}/release", assetId);
+            var content = new StringContent("", Encoding.UTF8, "application/json");
+            var response = client.PostAsync(url, content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Se ha liberado correctamente el activo";
+            }
+            else
+            {
+                data = "No se ha podido liberar el activo " + response.StatusCode;
             }
         }
         catch (Exception ex)
