@@ -22,6 +22,8 @@ public interface IService
     string RemoveAssetFromEmployee(int employeeId, int assetId);
     [OperationContract]
     string UpdateEmployee(int employeeId, string name, string lastName, string curp, DateTime birthDate, string email);
+    [OperationContract]
+    string AddAssetToEmployee(string asset);
 
 
     //   EMAIL   //

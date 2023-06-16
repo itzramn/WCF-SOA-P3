@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
@@ -164,7 +165,35 @@ public class Service : IService
         }
         return data;
     }
+    public string AddAssetToEmployee(string asset)
+    {
+        string data = "";
+        try
+        {
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
 
+            var json = JsonConvert.SerializeObject(asset);
+
+            var stringContentAsset = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = client.PostAsync("https://p2-soa-api.azurewebsites.net/Employees/Assets", stringContentAsset).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Se añadió activo exitosamente.";
+            }
+            else
+            {
+                return "Error al asignar activo. Código de estado: " + response.StatusCode;
+            }
+        }
+        catch (Exception ex)
+        {
+            data = ex.Message;
+        }
+        return data;
+    }
 
     //   EMAIL   //
     public string SendEmailReminders()
