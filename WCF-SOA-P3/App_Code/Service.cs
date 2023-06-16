@@ -204,7 +204,7 @@ public class Service : IService
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
-            var response = client.GetAsync("https://localhost:7154/Email").Result;
+            var response = client.GetAsync("https://p2-soa-api.azurewebsites.net/Email").Result;
 
             if (response.IsSuccessStatusCode)
             {
